@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De la Idea al Modelo Predictivo - Cazadores de Productos</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #10b981; /* Emerald Green */
+            --accent-hover: #059669;
+            --light-bg: #f8fafc;
+            --text-main: #334155;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e1b4b 100%);
+            color: white;
+            padding: 100px 0 80px;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #34d399, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .objective-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid var(--accent);
+            padding: 25px;
+            border-radius: 0 15px 15px 0;
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* Timeline Layout */
+        .timeline-container {
+            position: relative;
+            padding: 50px 0;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: #cbd5e1;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .step-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .step-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .step-content {
+            width: 45%;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--accent);
+        }
+
+        .step-image {
+            width: 45%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .step-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .step-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .step-number {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            border: 4px solid var(--light-bg);
+            box-shadow: 0 0 0 4px var(--accent);
+        }
+
+        /* Lists and Typography */
+        .step-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .step-content ul li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .step-content ul li::before {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        /* AI Improvement Box */
+        .ai-insight {
+            background: #e0f2fe;
+            border: 1px solid #7dd3fc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .ai-insight h6 {
+            color: #0284c7;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .ai-insight p {
+            font-size: 0.9rem;
+            color: #0c4a6e;
+            margin-bottom: 0;
+        }
+
+        /* Calculator Section */
+        .calculator-section {
+            background: var(--secondary);
+            color: white;
+            padding: 80px 0;
+        }
+
+        .calc-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .form-control-dark {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .form-control-dark:focus {
+            background: rgba(0,0,0,0.3);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: none;
+        }
+
+        .btn-predict {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            padding: 15px 30px;
+            border-radius: 8px;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-predict:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        #resultadoCalculadora {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .timeline-container::before { left: 30px; }
+            .step-row { flex-direction: column !important; align-items: flex-end; margin-bottom: 50px; }
+            .step-content, .step-image { width: 90%; }
+            .step-number { left: 30px; top: 0; transform: translate(-50%, 0); }
+            .step-image { margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-light text-dark mb-3 px-3 py-2 fs-6">Informática y Métodos Cuantitativos</span>
+                    <h1 class="hero-title">Analizando el Éxito: De la Idea al Modelo Predictivo</h1>
+                    <h3 class="fw-light mb-4">Cazadores de Productos Ganadores: Tendencias, Métricas y Modelos de Pronóstico</h3>
+                    
+                    <div class="objective-card">
+                        <strong>Objetivo de la actividad:</strong> En el marco del curso de Informática y Métodos Cuantitativos del programa de Administración Financiera (tercer semestre), el estudiante analizará productos en tendencia en AliExpress para identificar tres opciones de diferentes gamas, y así seleccionar el producto ideal aplicando modelos de pronóstico.
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center d-none d-lg-block">
+                    <i class="fas fa-chart-line" style="font-size: 15rem; color: rgba(255,255,255,0.1);"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE SECTION -->
+    <section class="container timeline-container">
+
+        <!-- PASO 1 -->
+        <div class="step-row observer-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Registro y Selección en AliExpress</h3>
+                <ul>
+                    <li>Ingresa a la plataforma oficial de AliExpress en tu navegador web y crea una cuenta de usuario nueva.</li>
+                    <li>En el menú superior, haz clic en la opción <strong>'Encontrar productos para vender'</strong>: aquí accederás al panel donde se evalúan métricas y viabilidad de artículos para dropshipping.</li>
+                    <li>Selecciona la categoría <strong>'Productos Ganadores'</strong>: encontrarás una lista depurada de los artículos con mayor volumen de ventas y popularidad entre los compradores.</li>
+                    <li>Haz clic en <strong>'Ver más'</strong>: ingresarás al catálogo completo donde podrás filtrar y explorar a fondo cada uno de los productos de tendencia.</li>
+                    <li>Registra el nombre, el precio y guarda el enlace de los productos seleccionados en tu formato de trabajo.</li>
+                </ul>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1516322073661-8280f2d48358?auto=format&fit=crop&w=800&q=80" alt="E-commerce shopping interface">
+            </div>
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="step-row observer-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Análisis de Información del Producto</h3>
+                <ul>
+                    <li>Haz clic en el producto seleccionado para abrir su página de detalles completa: esto es crucial para evaluar su viabilidad comercial y recopilar los datos específicos necesarios para el modelo de pronóstico y evaluación del producto.</li>
+                    <li>Analiza el título, el precio actual y el número total de unidades vendidas cerca del nombre: esta tarea te permite medir la popularidad real del artículo y establecer su posición competitiva en el mercado mediante el precio base y la demanda histórica.</li>
+                    <li>Analiza la puntuación en estrellas, basada en valoraciones de clientes, y lee las reseñas: al realizar esto, identificarás la satisfacción del cliente, conociendo las fortalezas del producto y detectando posibles fallas o reclamaciones recurrentes que podrían afectar las ventas.</li>
+                    <li>Explora las pestañas de <strong>'Detalles'</strong> y <strong>'Descripción'</strong>: aquí es donde comprenderás a fondo las especificaciones técnicas, los materiales de fabricación y las características avanzadas, lo cual es fundamental para destacar los beneficios únicos del producto ante el consumidor.</li>
+                    <li>Examina la información del vendedor, incluyendo su antigüedad y valoraciones: verificar este punto asegura que trabajarás con un proveedor confiable y con buena reputación en la plataforma, lo que garantiza tiempos de respuesta adecuados y reduce el riesgo de incumplimiento logístico.</li>
+                </ul>
+                
+                <div class="ai-insight">
+                    <h6><i class="fas fa-lightbulb me-2"></i>Propuesta de Mejora (Insight IA)</h6>
+                    <p>Para sistematizar este paso, te sugiero crear una "Matriz de Valoración Cualitativa" en Excel. Asigna un puntaje del 1 al 5 al proveedor (basado en antigüedad) y extrae las 3 palabras más repetidas en las reseñas negativas. Esto volverá cuantificable un dato que originalmente es texto.</p>
+                </div>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80" alt="Customer reviews and payment screen">
+            </div>
+        </div>
+
+        <!-- PASO 3 -->
+        <div class="step-row observer-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Tendencias de Búsqueda y Segmentación</h3>
+                <ul>
+                    <li>Ingresa a la plataforma Google Trends y escribe el nombre del primer producto seleccionado.</li>
+                    <li>Analiza el problema que el producto soluciona y el segmento de mercado al que va dirigido para tener plena claridad sobre su potencial.</li>
+                    <li>Evalúa el interés por el producto mediante un análisis internacional, luego filtra los resultados a Sudamérica y finalmente a Colombia para medir la viabilidad de importación.</li>
+                    <li>Repite este mismo proceso de análisis y segmentación para el segundo y tercer producto de tu selección.</li>
+                    <li>Registra las métricas de tendencia de los tres productos y compáralas para identificar el de mayor impacto y oportunidad.</li>
+                </ul>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Market segmentation charts">
+            </div>
+        </div>
+
+        <!-- PASO 4 -->
+        <div class="step-row observer-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h3>Instructivo para el manejo de Google Trends</h3>
+                <ul>
+                    <li>Ingresa a la plataforma oficial de Google Trends y familiarízate con la barra de búsqueda principal: es el punto de partida para evaluar el interés digital por los productos seleccionados.</li>
+                    <li>Escribe el nombre de tu producto y selecciona la opción de <strong>"Tema"</strong>: obtendrás datos más precisos y agrupados que consideran variantes y errores ortográficos del término.</li>
+                    <li>Ajusta los filtros de "Ubicación" desde <strong>"Todo el mundo"</strong> hasta <strong>"Colombia"</strong>: este procedimiento mide el alcance global, regional y local, validando si el interés es relevante para una importación en el mercado colombiano.</li>
+                    <li>Explora la gráfica de <strong>"Interés a lo largo del tiempo"</strong>: muestra la evolución de la popularidad en una escala de 1 a 100, ayudando a identificar si la demanda es estable, creciente o estacional.</li>
+                    <li>Utiliza el botón de descarga en la esquina superior derecha: te permite exportar los datos históricos a tu equipo en formato CSV para su posterior análisis estadístico.</li>
+                </ul>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=800&q=80" alt="Searching trends on a laptop">
+            </div>
+        </div>
+
+        <!-- PASO 5 -->
+        <div class="step-row observer-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <h3>Interpretación de Resultados en Trends</h3>
+                <ul>
+                    <li>Analiza la gráfica de <strong>"Interés a lo largo del tiempo"</strong>: esta visualización muestra el nivel de búsqueda del producto en relación con el punto más alto del gráfico (100). Es vital porque revela ciclos estacionales, picos de demanda y si el interés general está creciendo o disminuyendo a través de los años.</li>
+                    <li>Examina el mapa de <strong>"Interés por región"</strong>: este mapa de calor identifica en qué zonas geográficas se concentra la mayor cantidad de búsquedas. Te permite localizar mercados clave y determinar si la relevancia del producto se mantiene constante a nivel internacional, regional y local.</li>
+                    <li>Revisa la sección de <strong>"Temas relacionados"</strong> y <strong>"Consultas relacionadas"</strong>: estos listados exponen qué otros conceptos o frases específicas utiliza el usuario al buscar tu producto. Es fundamental para descubrir necesidades complementarias o sub-nichos no detectados inicialmente que enriquecen el conocimiento del mercado.</li>
+                </ul>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data interpretation and graphs">
+            </div>
+        </div>
+
+        <!-- PASO 6 -->
+        <div class="step-row observer-step">
+            <div class="step-number">6</div>
+            <div class="step-content">
+                <h3>Filtros y Descarga de Datos</h3>
+                <ul>
+                    <li>Selecciona la opción de ubicación "Todo el mundo" para el análisis internacional: esto es crucial para entender el comportamiento global de la demanda del producto antes de reducir el campo.</li>
+                    <li>Ajusta el filtro de tiempo a <strong>"Últimos 12 meses"</strong>: este parámetro permite identificar patrones de compra recientes y la estabilidad de la tendencia actual.</li>
+                    <li>Aplica categorías relevantes para tu producto y asegúrate de que la búsqueda se realice en <strong>"Búsqueda web"</strong>: esto evita confusiones con otros tipos de contenido en la plataforma.</li>
+                    <li>Repite los pasos de segmentación para analizar las métricas específicas en <strong>"América"</strong> y finalmente en <strong>"Colombia"</strong>: este paso a paso localiza oportunidades de mercado con precisión regional.</li>
+                    <li>Haz clic en el botón de descarga y <strong>exporta los datos a tu equipo en formato CSV</strong>: esta tarea te proporciona la base de datos numérica para calcular tus modelos matemáticos.</li>
+                </ul>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&w=800&q=80" alt="Database and CSV downloading concept">
+            </div>
+        </div>
+
+        <!-- PASO 7 & 8 -->
+        <div class="step-row observer-step">
+            <div class="step-number">7</div>
+            <div class="step-content">
+                <h3>Análisis Comparativo y Sub-Nichos</h3>
+                <ul>
+                    <li><strong>Paso 7: Análisis Comparativo Cruzado:</strong> Utiliza la función «Añadir comparación» en Google Trends para evaluar el interés de los tres productos frente a frente: esta tarea es fundamental para identificar cuál de las opciones seleccionadas domina el mercado digital en cuanto a volumen y constancia de búsqueda.</li>
+                    <li><strong>Paso 8: Exploración de Términos:</strong> Investiga variantes, sinónimos y la categoría asignada a cada producto en Google Trends: este paso estratégico permite descubrir sub-nichos no detectados inicialmente, enriqueciendo profundamente la comprensión del mercado y del comportamiento del consumidor.</li>
+                </ul>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&w=800&q=80" alt="Brainstorming and market analysis">
+            </div>
+        </div>
+
+        <!-- PASO 9 -->
+        <div class="step-row observer-step">
+            <div class="step-number">9</div>
+            <div class="step-content">
+                <h3>Importación y Modelo de Pronóstico</h3>
+                <ul>
+                    <li>Abre una hoja de cálculo (como Excel) e <strong>importa los archivos CSV</strong> que descargaste previamente: esta acción consolida la información histórica en un entorno de trabajo manejable para su estructuración y tratamiento matemático.</li>
+                    <li><strong>Organiza los datos cronológicamente</strong>, separando las fechas y los volúmenes de búsqueda en columnas distintas: esto es fundamental para construir correctamente la serie de tiempo y facilitar el cálculo de las proyecciones.</li>
+                    <li>Aplica un <strong>modelo de pronóstico cuantitativo</strong> a la serie de datos, utilizando métodos como el promedio móvil o la regresión lineal: este cálculo te permitirá proyectar la demanda futura del producto con base en su comportamiento histórico.</li>
+                    <li>Genera un <strong>gráfico de dispersión o de líneas</strong> que compare los datos históricos reales con los resultados de tu pronóstico: esta representación visual es esencial para evaluar la precisión del modelo y detectar el margen de error.</li>
+                    <li>Repite la importación y el cálculo proyectivo para los tres productos analizados en las etapas anteriores: este procedimiento garantiza que la decisión final esté sustentada en evidencia estadística comparativa rigurosa.</li>
+                </ul>
+                
+                <div class="ai-insight">
+                    <h6><i class="fas fa-lightbulb me-2"></i>Propuesta de Mejora (Insight IA)</h6>
+                    <p>Al importar el CSV, asegúrate de usar la herramienta "Texto en columnas" de Excel (delimitado por comas) para que las fechas no se confundan con texto. Para la Regresión Lineal, usa las funciones <code>=PENDIENTE()</code> e <code>=INTERSECCION.EJE()</code> para hallar <em>y = mx + b</em> de forma automática.</p>
+                </div>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1543286386-2e659306cd6c?auto=format&fit=crop&w=800&q=80" alt="Excel spreadsheet and forecasting charts">
+            </div>
+        </div>
+
+        <!-- PASO 10 -->
+        <div class="step-row observer-step">
+            <div class="step-number">10</div>
+            <div class="step-content">
+                <h3>Selección Definitiva y Argumentación</h3>
+                <ul>
+                    <li>Analiza los resultados cuantitativos de los pronósticos proyectados para cada una de las tres alternativas: esta evaluación te permitirá identificar qué artículo ofrece la <strong>tendencia de crecimiento más sólida y la menor volatilidad</strong> a futuro en el mercado colombiano.</li>
+                    <li><strong>Contrasta las proyecciones matemáticas con las variables cualitativas</strong> identificadas en AliExpress, tales como el costo, los materiales y la reputación del proveedor: realizar este cruce de información es vital para asegurar que la viabilidad comercial sea integral y realista.</li>
+                    <li>Redacta una <strong>conclusión gerencial</strong> justificando la elección del producto definitivo basándote estrictamente en los hallazgos técnicos y estadísticos: este ejercicio consolida tu capacidad analítica y demuestra la correcta aplicación de los métodos cuantitativos en la toma de decisiones.</li>
+                </ul>
+            </div>
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80" alt="Successful business decision handshake">
+            </div>
+        </div>
+
+    </section>
+
+    <!-- CALCULADORA INTERACTIVA -->
+    <section class="calculator-section">
+        <div class="container">
+            <div class="row mb-5 text-center">
+                <div class="col-12">
+                    <h2 class="text-white">Simulador de Viabilidad Integral (Insight IA)</h2>
+                    <p class="text-muted">Aplica lo aprendido en el Paso 10. Ingresa los datos proyectados de tus 3 productos y deja que el algoritmo determine matemáticamente cuál es el producto ganador basándose en Tendencia, Volatilidad (Error) y Costo.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Prod A -->
+                <div class="col-md-4">
+                    <div class="calc-card">
+                        <h4 class="text-info mb-3">Producto A</h4>
+                        <div class="mb-3">
+                            <label class="form-label small">Nombre del Producto</label>
+                            <input type="text" id="nameA" class="form-control form-control-dark" value="Audífonos Bluetooth">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Pendiente Crecimiento (+%)</label>
+                            <input type="number" id="trendA" class="form-control form-control-dark" value="15">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Margen Error Pronóstico (%)</label>
+                            <input type="number" id="errorA" class="form-control form-control-dark" value="8">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Costo Unitario (USD)</label>
+                            <input type="number" id="costA" class="form-control form-control-dark" value="12">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prod B -->
+                <div class="col-md-4">
+                    <div class="calc-card">
+                        <h4 class="text-warning mb-3">Producto B</h4>
+                        <div class="mb-3">
+                            <label class="form-label small">Nombre del Producto</label>
+                            <input type="text" id="nameB" class="form-control form-control-dark" value="Smartwatch">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Pendiente Crecimiento (+%)</label>
+                            <input type="number" id="trendB" class="form-control form-control-dark" value="25">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Margen Error Pronóstico (%)</label>
+                            <input type="number" id="errorB" class="form-control form-control-dark" value="18">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Costo Unitario (USD)</label>
+                            <input type="number" id="costB" class="form-control form-control-dark" value="35">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prod C -->
+                <div class="col-md-4">
+                    <div class="calc-card">
+                        <h4 class="text-danger mb-3">Producto C</h4>
+                        <div class="mb-3">
+                            <label class="form-label small">Nombre del Producto</label>
+                            <input type="text" id="nameC" class="form-control form-control-dark" value="Funda Silicona">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Pendiente Crecimiento (+%)</label>
+                            <input type="number" id="trendC" class="form-control form-control-dark" value="5">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Margen Error Pronóstico (%)</label>
+                            <input type="number" id="errorC" class="form-control form-control-dark" value="3">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Costo Unitario (USD)</label>
+                            <input type="number" id="costC" class="form-control form-control-dark" value="2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <button class="btn-predict" onclick="calcularGanador()"><i class="fas fa-magic me-2"></i>Ejecutar Matriz de Decisión</button>
+                </div>
+            </div>
+
+            <div id="resultadoCalculadora" class="row mt-5 justify-content-center">
+                <div class="col-md-8 text-center">
+                    <div class="alert alert-success bg-transparent border-success text-white p-4" style="border-width: 2px;">
+                        <h3 class="text-success mb-3"><i class="fas fa-trophy me-2"></i>Producto Ganador: <span id="winName"></span></h3>
+                        <p id="winReason" class="mb-0 fs-5 fw-light"></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animación de Scroll
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.observer-step').forEach(step => {
+                observer.observe(step);
+            });
+        });
+
+        // Lógica de la Calculadora de Viabilidad
+        // Ecuación simplificada: Score = Crecimiento - (Error * 1.5) - (Costo normalizado)
+        function calcularGanador() {
+            const prods = [
+                {
+                    nombre: document.getElementById('nameA').value,
+                    trend: parseFloat(document.getElementById('trendA').value),
+                    error: parseFloat(document.getElementById('errorA').value),
+                    cost: parseFloat(document.getElementById('costA').value)
+                },
+                {
+                    nombre: document.getElementById('nameB').value,
+                    trend: parseFloat(document.getElementById('trendB').value),
+                    error: parseFloat(document.getElementById('errorB').value),
+                    cost: parseFloat(document.getElementById('costB').value)
+                },
+                {
+                    nombre: document.getElementById('nameC').value,
+                    trend: parseFloat(document.getElementById('trendC').value),
+                    error: parseFloat(document.getElementById('errorC').value),
+                    cost: parseFloat(document.getElementById('costC').value)
+                }
+            ];
+
+            let bestScore = -9999;
+            let winner = null;
+
+            prods.forEach(p => {
+                // Penalizamos fuertemente el error de pronóstico (volatilidad) y levemente el costo para equilibrar
+                let score = p.trend - (p.error * 1.5) - (p.cost * 0.1);
+                if(score > bestScore) {
+                    bestScore = score;
+                    winner = p;
+                }
+            });
+
+            const resDiv = document.getElementById('resultadoCalculadora');
+            const winName = document.getElementById('winName');
+            const winReason = document.getElementById('winReason');
+
+            winName.innerText = winner.nombre;
+            winReason.innerHTML = `Según el modelo cuantitativo cruzado, <strong>${winner.nombre}</strong> presenta la mejor viabilidad integral. Ofrece un equilibrio matemático superior al combinar una tendencia de crecimiento sólida (+${winner.trend}%) con una dispersión de error controlada (${winner.error}%), mitigando el riesgo operativo asociado a su costo ($${winner.cost}).`;
+            
+            resDiv.style.display = 'flex';
+            
+            // Scroll hacia el resultado
+            resDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+</body>
+</html>
